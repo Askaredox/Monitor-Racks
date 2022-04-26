@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS `Batea` (
   `idBatea` INT NOT NULL AUTO_INCREMENT,
   `descripcion` VARCHAR(128) NOT NULL,
   `temperatura` DOUBLE NOT NULL,
+  `encendido` TINYINT NOT NULL,
   `Rack_idRack` INT NOT NULL,
   PRIMARY KEY (`idBatea`),
   INDEX `fk_Batea_Rack1_idx` (`Rack_idRack` ASC) VISIBLE,
