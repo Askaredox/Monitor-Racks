@@ -21,22 +21,16 @@ class Login(Resource):
     def get(self):
         return {'ok': True}
 
+@api.resource('/registro')
+class Registro(Resource):
+    def post(self):
+        return {'ok': True}
+
 
 @api.resource('/usuario', '/usuario/<int:id>')
 class Usuario(Resource):
     def get(self, id):
         return {'ok': True}
-
-    def post(self):
-        content = request.json
-        necessary_data = [
-            'carnet',
-            'nombre'
-        ]
-        if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
-        else:
-            return {'status': 1, 'msg':'Data no válida'}, 400
 
     def put(self, id):
         content = request.json
@@ -48,9 +42,6 @@ class Usuario(Resource):
             return {'ok': True}, 200
         else:
             return {'status': 1, 'msg':'Data no válida'}, 400
-
-    def delete(self, id):
-        return {'ok': True}
 
 
 @api.resource('/rack', '/rack/<int:id>')
