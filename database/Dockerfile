@@ -4,4 +4,5 @@ ENV MYSQL_DATABASE Racks
 ENV MYSQL_USER admin
 ENV MYSQL_PASSWORD Test_1234_
 
-ADD setup.sql /docker-entrypoint-initdb.d
+ADD setup.sql /docker-entrypoint-initdb.d/setup.sql
+RUN chmod -R 775 /docker-entrypoint-initdb.d

@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
   `nombre` VARCHAR(64) NOT NULL,
   `apellido` VARCHAR(64) NOT NULL,
   `correo` VARCHAR(64) NOT NULL UNIQUE,
-  `contrasena` VARCHAR(32) NOT NULL,
+  `contrasena` VARCHAR(128) NOT NULL,
   `create_time` DATETIME NOT NULL,
   `activar_notif` TINYINT NOT NULL DEFAULT 1,
   `activar_correo` TINYINT NOT NULL DEFAULT 1,

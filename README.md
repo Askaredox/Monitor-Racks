@@ -44,8 +44,8 @@ Monitor de temperatura para Bateas
 
 ## Backend
 
-- [ ] Login
-- [ ] Registro
+- [x] Login
+- [x] Registro
 - [ ] CRUD Rack
 - [ ] CRUD Batea
 - [ ] Set temperatura
@@ -57,8 +57,8 @@ Monitor de temperatura para Bateas
 
 ## Base de datos
 
-- [ ] Tipo usuario
-- [ ] Usuario
-- [ ] Rack
-- [ ] Batea
-- [ ] Historial
+- [x] Tipo usuario
+- [x] Usuario
+- [x] Rack
+- [x] Batea
+- [x] Historial

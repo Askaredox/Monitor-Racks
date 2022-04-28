@@ -3,7 +3,7 @@ import requests
 import simplejson as json
 
 class TestEstudiante(unittest.TestCase):
-    URL = 'http://172.19.0.3:3000'
+    URL = 'http://172.19.0.2:5000'
     id_e = 12
     def test_01_check(self):
         r = requests.get(self.URL)

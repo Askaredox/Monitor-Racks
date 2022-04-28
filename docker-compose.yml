@@ -5,13 +5,10 @@ services:
     container_name: backend
     restart: always
     build: backend/.
-    environment:
-      - DB_HOST=172.19.0.4
-      - DB_USER=admin
-      - DB_PASS=Test_1234_
-      - DB_DATABASE=Racks
+    env_file: 
+      - ./.env
     ports:
-      - "3000:3000"
+      - "5000:5000"
     networks:
       app-net:
         ipv4_address: 172.19.0.2
