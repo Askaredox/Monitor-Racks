@@ -29,16 +29,10 @@ class Login(Resource):
         user = db.login(correo, contrasena)
         if(user != None):
             access_token = create_access_token(identity=user['idUsuario'])
-            return {'ok': 0, 'access_token': access_token}, 200
+            resp = {'ok': 0, 'access_token': access_token}
+            return resp, 200
         else:
             return {'ok': 1, 'mensaje': 'Correo o contraseña no correcto'}, 401
-
-@api.resource('/logout')
-class Logout(Resource):
-    def get(self):
-        unset_jwt_cookies('Logout correcto')
-        return {'ok': 1, 'mensaje': 'Logout correcto'}, 200
-            
 
 @api.resource('/registro')
 class Registro(Resource):
@@ -52,123 +46,111 @@ class Registro(Resource):
         ]
         if(all(name in content.keys() for name in necessary_data)):
             code, message = db.add_user(content)
-            return {'ok': code, 'mensaje':message}, 200 if code == 0 else 403
+            return {'ok': code, 'mensaje':message}, 201 if code == 0 else 403
         return {'ok': 1, 'mensaje':'Data no valida'}, 400
 
 
-@api.resource('/usuario', '/usuario/<int:id>')
+@api.resource('/usuario')
 class Usuario(Resource):
-    def get(self, id):
-        return {'ok': True}
+    @jwt_required()
+    def get(self):
+        current_user = get_jwt_identity()
+        code, data = db.get_user_data(current_user)
+        return {'ok': code, 'data':data}
 
-    def put(self, id):
-        content = request.json
-        necessary_data = [
-            'carnet',
-            'nombre'
-        ]
-        if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
-        else:
-            return {'status': 1, 'msg':'Data no válida'}, 400
+    @jwt_required()
+    def delete(self):
+        current_user = get_jwt_identity()
+        code, data = db.delete_user(current_user)
+        response = {'ok': code, 'data':data}
+        return response
+
+    # def put(self):
+    #     content = request.json
+    #     necessary_data = [
+    #         'carnet',
+    #         'nombre'
+    #     ]
+    #     if(all(name in content.keys() for name in necessary_data)):
+    #         return {'ok': True}, 200
+    #     else:
+    #         return {'status': 1, 'msg':'Data no válida'}, 400
+
 
 
 @api.resource('/rack', '/rack/<int:id>')
 class Rack(Resource):
-    def get(self, id):
-        return {'ok': True}
+    @jwt_required()
+    def get(self):
+        current_user = get_jwt_identity()
+        code, data = db.get_user_rack(current_user)
+        print(data)
+        return {'ok': code, 'data':data}, 200
 
+    @jwt_required()
     def post(self):
+        current_user = get_jwt_identity()
         content = request.json
         necessary_data = [
-            'carnet',
-            'nombre'
+            'descripcion'
         ]
         if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
+            code, data = db.add_rack(content, current_user)
+            return {'ok': code, 'data':data}, 201
         else:
             return {'status': 1, 'msg':'Data no válida'}, 400
 
-    def put(self, id):
-        content = request.json
-        necessary_data = [
-            'carnet',
-            'nombre'
-        ]
-        if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
-        else:
-            return {'status': 1, 'msg':'Data no válida'}, 400
+    # def put(self, id):
+    #     content = request.json
+    #     necessary_data = [
+    #         'carnet',
+    #         'nombre'
+    #     ]
+    #     if(all(name in content.keys() for name in necessary_data)):
+    #         return {'ok': True}, 200
+    #     else:
+    #         return {'status': 1, 'msg':'Data no válida'}, 400
 
+    @jwt_required()
     def delete(self, id):
-        return {'ok': True}
+        code, data = db.delete_rack(id)
+        response = {'ok': code, 'data':data}
+        return response
 
 
 @api.resource('/batea', '/batea/<int:id>')
 class Batea(Resource):
+    @jwt_required()
     def get(self, id):
-        return {'ok': True}
+        code, data = db.get_user_batea(id)
+        return {'ok': code, 'data':data}, 200
 
+    @jwt_required()
     def post(self):
         content = request.json
         necessary_data = [
-            'carnet',
-            'nombre'
+            'rack_id',
+            'descripcion'
         ]
         if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
+            code, data = db.add_batea(content, content['rack_id'])
+            return {'ok': code, 'data':data}, 201
         else:
             return {'status': 1, 'msg':'Data no válida'}, 400
 
-    def put(self, id):
-        content = request.json
-        necessary_data = [
-            'carnet',
-            'nombre'
-        ]
-        if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
-        else:
-            return {'status': 1, 'msg':'Data no válida'}, 400
+    # def put(self, id):
+    #     content = request.json
+    #     necessary_data = [
+    #         'carnet',
+    #         'nombre'
+    #     ]
+    #     if(all(name in content.keys() for name in necessary_data)):
+    #         return {'ok': True}, 200
+    #     else:
+    #         return {'status': 1, 'msg':'Data no válida'}, 400
 
+    @jwt_required()
     def delete(self, id):
-        return {'ok': True}
-
-
-@api.resource('/historial', '/historial/<int:id>')
-class Historial(Resource):
-    def get(self):
-        return {'ok': True}
-
-    def post(self):
-        content = request.json
-        necessary_data = [
-            'carnet',
-            'nombre'
-        ]
-        if(all(name in content.keys() for name in necessary_data)):
-            return {'ok': True}, 200
-        else:
-            return {'status': 1, 'msg':'Data no válida'}, 400
-
-@app.after_request
-def refresh_expiring_jwts(response):
-    try:
-        exp_timestamp = get_jwt()["exp"]
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(now + timedelta(minutes=30))
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(identity=get_jwt_identity())
-            data = response.get_json()
-            if type(data) is dict:
-                data["access_token"] = access_token 
-                response.data = json.dumps(data)
+        code, data = db.delete_batea(id)
+        response = {'ok': code, 'data':data}
         return response
-    except (RuntimeError, KeyError):
-        # Case where there is not a valid JWT. Just return the original respone
-        return response
-
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, threaded=True)

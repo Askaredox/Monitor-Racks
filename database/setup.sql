@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `Tipo_usuario` (
   `idTipo_usuario` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(32) NOT NULL,
   PRIMARY KEY (`idTipo_usuario`)
-)
+);
 
 
 
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `Usuario` (
   CONSTRAINT `fk_Usuario_Tipo_usuario`
     FOREIGN KEY (`Tipo_usuario_idTipo_usuario`)
     REFERENCES `Tipo_usuario` (`idTipo_usuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
-)
+);
 
 
 
@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS `Rack` (
   CONSTRAINT `fk_Rack_Usuario1`
     FOREIGN KEY (`Usuario_idUsuario`)
     REFERENCES `Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
-)
+);
 
 
 
@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS `Batea` (
   CONSTRAINT `fk_Batea_Rack1`
     FOREIGN KEY (`Rack_idRack`)
     REFERENCES `Rack` (`idRack`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
-)
+);
 
 
 
@@ -89,6 +89,6 @@ CREATE TABLE IF NOT EXISTS `Historial` (
   CONSTRAINT `fk_Historial_Usuario1`
     FOREIGN KEY (`Usuario_idUsuario`)
     REFERENCES `Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION
-)
+);

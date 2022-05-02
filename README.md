@@ -46,8 +46,8 @@ Monitor de temperatura para Bateas
 
 - [x] Login
 - [x] Registro
-- [ ] CRUD Rack
-- [ ] CRUD Batea
+- [x] CRUD Rack
+- [x] CRUD Batea
 - [ ] Set temperatura
 - [ ] Get temperatura
 - [ ] Set on/off
